@@ -1,6 +1,25 @@
-input.onButtonPressed(Button.A, function () {
-    買 = 0
+joystickbit.onButtonEvent(joystickbit.JoystickBitPin.P12, joystickbit.ButtonType.down, function () {
+    yn = 1
 })
+/**
+ * 地產總管理的第幾位數=0---無人買--------$=0
+ * 
+ * 地產總管理的第幾位數=1---A買房子=0---$/3X1
+ * 
+ * 地產總管理的第幾位數=2---B買房子=0---$/3X1
+ * 
+ * 地產總管理的第幾位數=3---A買房子=1---$/3X2
+ * 
+ * 地產總管理的第幾位數=4---B買房子=1---$/3X2
+ * 
+ * 地產總管理的第幾位數=5---A買房子=2---$/3X3
+ * 
+ * 地產總管理的第幾位數=6---B買房子=2---$/3X3
+ * 
+ * 地產總管理的第幾位數=7---A買旅館=1---$/3X4
+ * 
+ * 地產總管理的第幾位數=8---B買旅館=1---$/3X4
+ */
 input.onGesture(Gesture.Shake, function () {
     if (輪流 == 0) {
         A += randint(1, 6)
@@ -10,50 +29,56 @@ input.onGesture(Gesture.Shake, function () {
         if (A == 0) {
             角色a位置.set(LedSpriteProperty.X, 0)
             角色a位置.set(LedSpriteProperty.Y, 0)
-            basic.showLeds(`
+            basic.showString("" + images.createImage(`
                 . # # # #
                 . # # # #
                 . # # # #
                 . # . . .
                 . # . . .
-                `)
-            basic.clearScreen()
-            basic.pause(500)
-            basic.showString("start!")
+                `) + "Go!" + "+5$")
             A的錢 += 5
             輪流 = 1
+            basic.clearScreen()
         } else if (A == 1) {
             角色a位置.set(LedSpriteProperty.X, 1)
             角色a位置.set(LedSpriteProperty.Y, 0)
-            basic.showLeds(`
-                . # # # .
-                # . . . #
-                # . # . #
-                # . . . #
-                . # # # .
-                `)
-            basic.pause(500)
-            basic.clearScreen()
-            basic.showString("sun!")
-            basic.showString("20 $!")
-            basic.showString("buy?")
-            basic.showNumber(3)
-            basic.pause(1000)
-            basic.showNumber(2)
-            basic.pause(1000)
-            basic.showNumber(1)
-            basic.pause(1000)
-            if (買 == 0) {
-                basic.showString("OK!")
-            } else if (買 == 1) {
-                game.setScore(1)
-                A的錢 += -20
-                basic.showString("A:")
-                basic.showNumber(A的錢)
+            if (地產總管理的第幾位數(11) == 0) {
+                basic.showString("" + images.createImage(`
+                    . # # # .
+                    # . . . #
+                    # . # . #
+                    # . . . #
+                    . # # # .
+                    `) + "Sun!" + "Buy?")
+                basic.pause(500)
+                if (yn == 0) {
+                    basic.showString("OK!")
+                } else if (yn == 1) {
+                    A的錢 += -21
+                    basic.showString("A'$" + A的錢)
+                    地產總管理 += 10000000000
+                }
+                basic.clearScreen()
             }
         } else if (A == 2) {
             角色a位置.set(LedSpriteProperty.X, 2)
             角色a位置.set(LedSpriteProperty.Y, 0)
+            basic.showString("" + images.createImage(`
+                . # . # .
+                # . # . #
+                . # # # .
+                . . # . .
+                . . # . .
+                `) + "Mercury!" + "Buy?")
+            basic.pause(500)
+            if (yn == 0) {
+                basic.showString("OK!")
+            } else if (yn == 1) {
+                A的錢 += -6
+                basic.showString("A'$" + A的錢)
+                地產總管理 += 1000000000
+            }
+            basic.clearScreen()
         } else if (A == 3) {
             角色a位置.set(LedSpriteProperty.X, 3)
             角色a位置.set(LedSpriteProperty.Y, 0)
@@ -98,19 +123,30 @@ input.onGesture(Gesture.Shake, function () {
         B += randint(1, 6)
     }
 })
-input.onButtonPressed(Button.B, function () {
-    買 = 1
+joystickbit.onButtonEvent(joystickbit.JoystickBitPin.P15, joystickbit.ButtonType.down, function () {
+    yn = 0
 })
+function 地產總管理的第幾位數 (幾: number) {
+    地產總管理的第幾位數2 = 1
+    for (let index = 0; index < 幾; index++) {
+        地產總管理的第幾位數2 = 地產總管理的第幾位數2 * 10
+    }
+    地產總管理的第幾位數2 = (地產總管理 - 地產總管理 % 地產總管理的第幾位數2) % (地產總管理的第幾位數2 * 10)
+    return 地產總管理的第幾位數2
+}
+let 地產總管理的第幾位數2 = 0
 let A的錢 = 0
 let 角色a位置: game.LedSprite = null
-let 買 = 0
+let yn = 0
 let A = 0
+let 地產總管理 = 0
 let 輪流 = 0
-basic.showString("Monopoly")
+joystickbit.initJoystickBit()
 輪流 = 0
+地產總管理 = 0
 A = 0
 let B = 0
-買 = 0
+yn = 0
 角色a位置 = game.createSprite(0, 0)
 let 角色b位置 = game.createSprite(0, 0)
 A的錢 = 20
